@@ -8,3 +8,10 @@ func Contains[E comparable](needle E, haysack []E) bool {
 	}
 	return false
 }
+
+func Bool2Int(b bool) int {
+	if b {
+		return 1
+	}
+	return 0
+}
