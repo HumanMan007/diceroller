@@ -4,7 +4,7 @@
 program = probability ("\n" probability)* EOF;
 
 probability = NUMBER ("d" NUMBER)?
-            | ("adv" | "dis" | "crit") "(" probability ")"
+            | ("adv" | "dis") "(" probability ")"
             | "reroll(" probability ("," probability)+ ")"
             | probability ( "*" | "/" | "+" | "-" ) probability
             | "-" probability
@@ -12,7 +12,7 @@ probability = NUMBER ("d" NUMBER)?
             | "if" boolean "then" probability;
 
 boolean = probability (">" | "<" | "=" | "!=") probability
-        | probability "in(" (NUMBER)+ ")"
+        | probability "in(" NUMBER ("," NUMBER)* ")"
         | boolean ("and" | "or") boolean
         | "(" boolean ")";
 
@@ -31,4 +31,3 @@ DIGIT -> "0" .. "9";
 `if (1d20 + 5 > 15) then (1d10)` 
 - If hits then roll damage as a halfing 
 `if (reroll(1d20 + 5, 1) > 15) then (1d10)`
-- Roll all the die twice `crit(1d10 + 7)` -> `2d10 + 7`
