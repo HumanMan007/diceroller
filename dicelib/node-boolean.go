@@ -13,25 +13,47 @@ func binarize(p PSet) PSet {
 
 // If Then
 type ifThen struct {
-	node, bnode Node
+	condition        Node
+	success, failure Node
 }
 
 func (it ifThen) calculate() PSet {
-	return MulDiceSet(binarize(it.bnode.calculate()), it.node.calculate())
+	// Done raw since opCalculate is not capable of ternary operations
+	rate := binarize(it.condition.calculate())
+	ret := PSet{}
+
+	for val, prob := range it.success.calculate() {
+		ret[val] += prob * rate[1]
+	}
+
+	for val, prob := range it.failure.calculate() {
+		ret[val] += prob * rate[0]
+	}
+	return ret
 }
 
 func (it ifThen) roll() (int, string) {
-	val, expr := it.bnode.roll()
+	val, expr := it.condition.roll()
 	if val == 0 {
-		return 0, "if " + expr + " failed "
+		if it.failure != nil {
+			val, expr := it.failure.roll()
+			return val, "if " + expr + " then {failed} else " + expr
+		}
+		return 0, "if " + expr + " then {failed}"
 	} else {
-		val, expr2 := it.node.roll()
+		val, expr2 := it.success.roll()
+		if it.failure != nil {
+			return val, "if " + expr + " then " + expr2 + "else {failed}"
+		}
 		return val, "if " + expr + " then " + expr2
 	}
 }
 
 func (it ifThen) toString() string {
-	return "if " + it.bnode.toString() + " then " + it.node.toString()
+	if it.failure != nil {
+		return "if " + it.condition.toString() + " then " + it.success.toString() + " else " + it.failure.toString()
+	}
+	return "if " + it.condition.toString() + " then " + it.success.toString()
 }
 
 // Superior, inferior, equals unequals

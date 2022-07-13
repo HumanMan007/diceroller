@@ -9,7 +9,7 @@ probability = NUMBER ("d" NUMBER)?
             | probability ( "*" | "/" | "+" | "-" ) probability
             | "-" probability
             | "(" probability ")"
-            | "if" boolean "then" probability;
+            | "if" boolean "then" probability ("else" probability)?;
 
 boolean = probability (">" | "<" | "=" | "!=") probability
         | probability "in(" NUMBER ("," NUMBER)* ")"
