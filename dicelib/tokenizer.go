@@ -10,6 +10,7 @@ const (
 	NUMBER TokenType = iota
 	LEFT_PAREN
 	RIGHT_PAREN
+	COMA
 
 	ADVANTAGE
 	DISADVANTAGE
@@ -79,6 +80,8 @@ func nextToken(input string) (Token, string) {
 		return Token{D, "d"}, input[1:]
 	case '\n':
 		return Token{NEWLINE, "\n"}, input[1:]
+	case ',':
+		return Token{COMA, ","}, input[1:]
 	}
 
 	val, input := getInt(input)
