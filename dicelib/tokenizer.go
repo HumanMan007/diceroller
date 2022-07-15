@@ -25,7 +25,6 @@ const (
 	TIMES
 	DIVIDE
 
-	NEWLINE
 	EOF
 	UNEXPECTED
 )
@@ -40,7 +39,7 @@ func nextToken(input string) (Token, string) {
 		return Token{EOF, ""}, input
 	}
 
-	if input[0] == 0 || input[0] == '\t' { // Lazy consume whitespace
+	if input[0] == 0 || input[0] == '\t' || input[0] == '\n' { // Lazy consume whitespace
 		return nextToken(input[1:])
 	}
 
@@ -78,8 +77,6 @@ func nextToken(input string) (Token, string) {
 		return Token{DIVIDE, "/"}, input[1:]
 	case 'd':
 		return Token{D, "d"}, input[1:]
-	case '\n':
-		return Token{NEWLINE, "\n"}, input[1:]
 	case ',':
 		return Token{COMA, ","}, input[1:]
 	}

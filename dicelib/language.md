@@ -1,7 +1,7 @@
 # Language definition
 
 ```ebnf
-program = probability ("\n" probability)* EOF;
+program = probability|boolean EOF;
 
 probability = NUMBER ("d" NUMBER)?
             | ("adv" | "dis") "(" probability ")"
