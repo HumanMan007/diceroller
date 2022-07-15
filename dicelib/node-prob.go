@@ -59,6 +59,7 @@ func (bn binary) toString() string {
 // Parenthesis
 type paren struct {
 	Node
+	left, right string
 }
 
 func (pr paren) calculate() PSet {
@@ -67,11 +68,11 @@ func (pr paren) calculate() PSet {
 
 func (pr paren) roll() (int, string) {
 	val, expr := pr.Node.roll()
-	return val, "(" + expr + ")"
+	return val, pr.left + expr + pr.right
 }
 
 func (pr paren) toString() string {
-	return "(" + pr.Node.toString() + ")"
+	return pr.left + pr.Node.toString() + pr.right
 }
 
 // Advantage, disadvantage
